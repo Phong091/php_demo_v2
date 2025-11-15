@@ -1,0 +1,239 @@
+{
+    "/products": {
+        "get": {
+            "tags": ["Products"],
+            "summary": "List all Products",
+            "description": "Get a list of all products",
+            "operationId": "listProducts",
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+                {
+                    "name": "per_page",
+                    "in": "query",
+                    "description": "Number of items per page (max 100)",
+                    "required": false,
+                    "schema": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 100,
+                        "format": "int32",
+                        "default": 25
+                    }
+                },
+                {
+                    "name": "page",
+                    "in": "query",
+                    "description": "Page number",
+                    "required": false,
+                    "schema": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "default": 1
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    },
+                                    "pagination": {
+                                        "$ref": "#/components/schemas/Pagination"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                }
+            }
+        },
+        "post": {
+            "tags": ["Products"],
+            "summary": "Create a product",
+            "description": "Create a new product",
+            "operationId": "createProduct",
+            "security": [{ "bearerAuth": [] }],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ProductInput"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "201": {
+                    "description": "Product created successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "code": {
+                                        "type": "integer"
+                                    },
+                                    "message": {
+                                        "type": "string"
+                                    },
+                                    "success": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "$ref": "#/components/responses/BadRequest"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                }
+            }
+        }
+    },
+    "/products/{productId}": {
+        "get": {
+            "tags": ["Products"],
+            "summary": "Get product by ID",
+            "description": "Get detailed information about a specific product",
+            "operationId": "getProduct",
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "required": true,
+                    "description": "The id of the product to retrieve",
+                    "schema": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "$ref": "#/components/schemas/ProductDetail"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "$ref": "#/components/responses/NotFound"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                }
+            }
+        },
+        "put": {
+            "tags": ["Products"],
+            "summary": "Update a product",
+            "description": "Update an existing product",
+            "operationId": "updateProduct",
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "required": true,
+                    "description": "The id of the product to update",
+                    "schema": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ProductInput"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Product updated successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "$ref": "#/components/schemas/ProductDetail"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "$ref": "#/components/responses/BadRequest"
+                },
+                "404": {
+                    "$ref": "#/components/responses/NotFound"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                }
+            }
+        },
+        "delete": {
+            "tags": ["Products"],
+            "summary": "Delete a product",
+            "description": "Delete a product by ID",
+            "operationId": "deleteProduct",
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+                {
+                    "name": "productId",
+                    "in": "path",
+                    "required": true,
+                    "description": "The id of the product to delete",
+                    "schema": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "$ref": "#/components/responses/SuccessRequest"
+                },
+                "404": {
+                    "$ref": "#/components/responses/NotFound"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                }
+            }
+        }
+    }
+}
+

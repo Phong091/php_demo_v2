@@ -19,12 +19,14 @@ class ApiDocsController extends Controller
         $pathsFiles = [
             'auth/index.json',
             'user/index.json',
+            'product/index.json',
         ];
 
         $schemaFiles = [
             'common/index.json',
             'auth/index.json',
             'user/index.json',
+            'product/index.json',
         ];
 
         $pathsData = [];
