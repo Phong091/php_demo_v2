@@ -5,6 +5,7 @@
             "summary": "List all Users",
             "description": "This is a description",
             "operationId": "listUsers",
+            "security": [{ "bearerAuth": [] }],
             "parameters": [
                 {
                     "name": "per_page",
@@ -50,6 +51,9 @@
                             }
                         }
                     }
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
                 }
             }
         },
@@ -110,6 +114,7 @@
             "summary": "Detail a User",
             "description": "This is a description",
             "operationId": "showUser",
+            "security": [{ "bearerAuth": [] }],
             "parameters": [
                 {
                     "name": "userId",
@@ -134,6 +139,9 @@
                 },
                 "404": {
                     "$ref": "#/components/responses/NotFound"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
                 }
             }
         },
@@ -167,9 +175,10 @@
             },
             "responses": {
                 "400": { "$ref": "#/components/responses/BadRequest" },
-                "404": { "$ref": "#/components/responses/NotFound" }
+                "404": { "$ref": "#/components/responses/NotFound" },
+                "401": { "$ref": "#/components/responses/Unauthorized" }
             },
-            "security": [{ "Userstore_auth": ["write:Users", "read:Users"] }]
+            "security": [{ "bearerAuth": [] }]
         },
         "delete": {
             "tags": ["Users"],
@@ -189,9 +198,10 @@
             ],
             "responses": {
                 "404": { "$ref": "#/components/responses/NotFound" },
-                "200": { "$ref": "#/components/responses/SuccessRequest" }
+                "200": { "$ref": "#/components/responses/SuccessRequest" },
+                "401": { "$ref": "#/components/responses/Unauthorized" }
             },
-            "security": [{ "Userstore_auth": ["write:Users", "read:Users"] }]
+            "security": [{ "bearerAuth": [] }]
         }
     }
 }

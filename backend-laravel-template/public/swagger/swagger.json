@@ -11,7 +11,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000/api/v1",
+            "url": "http://localhost/api/v1",
             "description": "local",
             "variables": {}
         },
@@ -34,6 +34,14 @@
             "description": "Operations about Users",
             "externalDocs": {
                 "description": "Find out more about user",
+                "url": "http://swagger.io"
+            }
+        },
+        {
+            "name": "Products",
+            "description": "Operations about Products",
+            "externalDocs": {
+                "description": "Find out more about product",
                 "url": "http://swagger.io"
             }
         }
@@ -131,6 +139,13 @@
                 }
             }
         },
-        "schemas": {}
+        "schemas": {},
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Utils\HttpResponseHelper;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -42,17 +43,41 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof AuthenticationException) {
-            return response()->json(['message' => 'Unauthenticated.'], 401);
-        }
-        if ($exception instanceof ValidationException) {
-            return response()->json(['errors' => $exception->errors()], 400);
+        // Handle API requests with clean error responses
+        if ($request->is('api/*') || $request->expectsJson()) {
+            if ($exception instanceof AuthenticationException) {
+                return HttpResponseHelper::responseUnauthorized();
+            }
+            
+            if ($exception instanceof ValidationException) {
+                return HttpResponseHelper::responseBadRequest($exception->errors());
+            }
+
+            if ($exception instanceof ModelNotFoundException) {
+                return HttpResponseHelper::responseNotFound('Resource not found');
+            }
+
+            if ($exception instanceof NotFoundHttpException) {
+                return HttpResponseHelper::responseNotFound();
+            }
+
+            // For other exceptions in API, return clean response
+            if (config('app.debug')) {
+                // In debug mode, still show message but not full trace
+                return response()->json([
+                    'message' => $exception->getMessage(),
+                    'code' => method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500,
+                ], method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500);
+            }
+
+            // In production, show generic error
+            return response()->json([
+                'message' => 'Internal Server Error',
+                'code' => 500,
+            ], 500);
         }
 
-        if ($exception instanceof NotFoundHttpException) {
-            return HttpResponseHelper::responseNotFound();
-        }
-
+        // For web requests, use default Laravel behavior
         return parent::render($request, $exception);
     }
 }
