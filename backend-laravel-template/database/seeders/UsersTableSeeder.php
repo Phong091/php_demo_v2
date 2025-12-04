@@ -28,10 +28,10 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'name' => 'Test User1',
-                'email' => 'user@user.com',
+                'name' => 'Bookstore Admin',
+                'email' => 'admin@bookstore.com',
                 'email_verified_at' => now(),
-                'password' => bcrypt('secret'),
+                'password' => bcrypt('admin'),
             ],
         ];
         foreach ($data as $userItem) {
